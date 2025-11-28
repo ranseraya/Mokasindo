@@ -42,4 +42,16 @@ class TelegramService
             return ['success' => false, 'error' => 'Koneksi Error: ' . $e->getMessage()];
         }
     }
+     //Kirim notifikasi ke User tertentu berdasarkan data database
+    public function sendToUser($user, $message)
+    {
+        // Cek apakah user punya telegram_chat_id
+        if (empty($user->telegram_chat_id)) {
+            return ['success' => false, 'error' => 'User ini belum menautkan akun Telegram.'];
+        }
+
+        // Kalau ada, kirim pakai fungsi sendMessage yang lama
+        return $this->sendMessage($user->telegram_chat_id, $message);
+    }
+
 }

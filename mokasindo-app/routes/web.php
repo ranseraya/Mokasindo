@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Models\Page;
+use App\Models\User;
 
 Route::get('/', function () {
     return view('landing');
@@ -69,6 +70,30 @@ Route::get('/tes-bot', function () {
         return "✅ Sukses! Notifikasi keren sudah dikirim ke HP kamu.";
     } else {
         return "❌ Gagal Kirim! <br>Penyebab: " . $hasil['error'];
+    }
+});
+
+// --- TES DATABASE ---
+Route::get('/tes-db-notif', function () {
+    $telegram = new TelegramService();
+    
+    // 1. Ambil User pertama dari database (yang tadi kamu edit di phpMyAdmin)
+    $user = User::first(); 
+    
+    // Cek apakah usernya ketemu
+    if (!$user) {
+        return "Database kosong! Jalankan 'php artisan migrate:fresh --seed' dulu.";
+    }
+
+    $pesan = "Halo <b>{$user->name}</b>! \nSistem berhasil menemukan ID Telegram kamu dari Database Mokasindo. Keren kan? 😎";
+
+    // 2. Kirim notifikasi ke user tersebut
+    $hasil = $telegram->sendToUser($user, $pesan);
+
+    if ($hasil['success']) {
+        return "✅ Sukses kirim ke user: " . $user->name;
+    } else {
+        return "❌ Gagal: " . $hasil['error'];
     }
 });
 
