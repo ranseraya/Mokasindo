@@ -6,6 +6,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WishlistController;
 use App\Models\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 Route::get('/', function () {
     return view('landing');
@@ -78,3 +80,34 @@ Route::get('/force-login', function () {
     
     return "<h1>Berhasil Login!</h1> <p>Login sebagai: <b>" . $user->name . "</b></p><p>Silakan akses <a href='/wishlists'>/wishlists</a> atau <a href='/etalase/vehicles'>/etalase/vehicles</a></p>";
 });
+
+// Tampilkan form register perusahaan
+Route::get('/register', function () {
+	return view('pages.company.register');
+})->name('register.form');
+
+// Terima form register (sederhana)
+Route::post('/register', function (Request $request) {
+	$rules = [
+		'name' => 'required|string|max:255',
+		'email' => 'required|email|max:255',
+		'phone' => 'required|string|max:50',
+		'password' => 'required|confirmed|min:6',
+		'province_id' => 'required',
+		'city_id' => 'required',
+		'district_id' => 'required',
+		'sub_district_id' => 'required',
+		'postal_code' => 'required',
+		'address' => 'required',
+	];
+
+	$validator = Validator::make($request->all(), $rules);
+
+	if ($validator->fails()) {
+		return redirect('/register')->withErrors($validator)->withInput();
+	}
+
+	// TODO: simpan data user/ perusahaan sesuai kebutuhan aplikasi
+	// Untuk sementara redirect kembali dengan pesan sukses
+	return redirect('/register')->with('status', 'Registrasi berhasil (demo).');
+})->name('company.register');
