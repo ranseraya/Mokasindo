@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\InstagramController;
 use App\Models\Page;
 
 Route::get('/', function () {
@@ -40,3 +41,5 @@ Route::controller(CompanyController::class)->group(function () {
     })->name('company.cookie_policy');
 
 });
+
+Route::get('/instagram-feed', [InstagramController::class, 'getMedia']);
