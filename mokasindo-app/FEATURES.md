@@ -14,11 +14,45 @@
 
 ---
 
-### 2. Etalase FB (2 Orang)
+### 2. Etalase FB (2 Orang) ✅ **SUDAH DIBUAT**
 
--   Tampilan katalog kendaraan
--   Gallery foto produk
--   Detail informasi kendaraan
+-   ✅ Tampilan katalog kendaraan (API ready)
+-   ✅ Gallery foto produk
+-   ✅ Detail informasi kendaraan
+-   ✅ Pencarian & Filter kendaraan (brand, kategori, harga, lokasi)
+-   ✅ Sorting (terbaru, termurah, termahal)
+-   ✅ Pagination (12 item per halaman)
+-   ✅ View counter untuk statistik
+
+**API Endpoints:**
+
+-   `GET /etalase/vehicles` - List kendaraan dengan filter & search
+-   `GET /etalase/vehicles/{id}` - Detail kendaraan
+-   `GET /etalase/filters` - Data untuk dropdown filter (brands, categories)
+
+**Filter Parameters:**
+
+-   `search` - Pencarian di brand, model, description
+-   `category` - Filter motor/mobil
+-   `min_price` & `max_price` - Range harga
+-   `city_id` - Filter berdasarkan kota
+-   `sort` - Urutan: latest, cheapest, expensive
+
+---
+
+### 2.1. Wishlist / Favorit ✅ **SUDAH DIBUAT**
+
+-   ✅ User bisa menyimpan kendaraan favorit
+-   ✅ List semua wishlist user
+-   ✅ Tambah ke wishlist
+-   ✅ Hapus dari wishlist
+-   ✅ Mencegah duplikat wishlist
+
+**API Endpoints:**
+
+-   `GET /wishlists` - List wishlist user (requires auth)
+-   `POST /wishlists` - Tambah ke wishlist (requires auth)
+-   `DELETE /wishlists/{id}` - Hapus dari wishlist (requires auth)
 
 ---
 
@@ -278,19 +312,23 @@ Sistem lokasi berbasis:
 ---
 
 ### 20. Sistem Informasi Perusahaan & Layanan Bantuan(Halaman Tentang Kami, Karir, Bantuan) (1 Orang)
+
 Fitur ini menangani manajemen konten dinamis (CMS) untuk informasi publik perusahaan dan interaksi pengguna non-transaksi. Seluruh konten dapat diubah melalui Database/Admin Panel.
 
 #### Fitur & Lingkup Kerja:
 
 1.  **Dynamic Page**:
+
     -   Manajemen konten teks & gambar untuk halaman Profil, Visi Misi, dan Legal (Terms/Privacy).
     -   Menggunakan tabel database untuk menyimpan konten (tidak hardcoded di view).
 
 2.  **Team & Structure Management**:
+
     -   CRUD Data Anggota Tim (Foto, Nama, Jabatan, Sosmed).
     -   Menampilkan daftar tim secara dinamis di halaman Frontend.
 
 3.  **(Portal Karir)**:
+
     -   **Job Listing**: Admin dapat memposting, mengedit, atau menutup lowongan kerja.
     -   **Applicant Tracking**: User dapat melamar dan mengunggah CV (PDF). Admin dapat melihat daftar pelamar masuk.
 
@@ -303,12 +341,14 @@ Fitur ini menangani manajemen konten dinamis (CMS) untuk informasi publik perusa
 Fitur ini mengelompokkan lelang kendaraan ke dalam "Jadwal" atau "Batch" tertentu (misal: "Lelang Akbar Jakarta - Senin"), sehingga lelang berjalan serentak dan lebih rapi.
 
 #### Fitur Backend (Admin):
+
 -   **Auction Batching System**:
     -   Admin membuat Jadwal Induk (Judul, Tanggal Mulai, Tanggal Selesai, Lokasi).
     -   **Bulk Assignment**: Admin bisa memilih banyak kendaraan sekaligus untuk dimasukkan ke jadwal tersebut.
     -   Sinkronisasi waktu: Saat dimasukkan ke jadwal, waktu lelang kendaraan otomatis mengikuti waktu jadwal.
 
 #### Fitur Frontend (User):
+
 -   **Interactive Calendar**: Tampilan kalender besar di mana user bisa melihat tanggal-tanggal yang memiliki jadwal lelang.
 -   **Schedule List**: Daftar jadwal lelang yang akan datang (Upcoming) dan sedang berlangsung (Live).
 -   **Schedule Filter**: User memfilter jadwal berdasarkan Kota/Cabang.
@@ -318,11 +358,13 @@ Fitur ini mengelompokkan lelang kendaraan ke dalam "Jadwal" atau "Batch" tertent
 Fitur ini menangani proses pasca-lelang, yaitu pengiriman unit kendaraan dari lokasi penjual/pool ke lokasi pemenang lelang, serta pencatatan bukti serah terima (BAST).
 
 #### Fitur Frontend (User & Driver):
+
 -   **Cek Ongkir Towing**: Integrasi API Maps (Google Distance Matrix) untuk menghitung estimasi biaya derek berdasarkan jarak lokasi unit dan lokasi pemenang.
 -   **Tracking Pengiriman**: Status pengiriman realtime (`Menunggu Pickup` -> `Dalam Perjalanan` -> `Terkirim`).
 -   **Konfirmasi Penerimaan**: Tombol bagi pemenang untuk mengonfirmasi bahwa unit telah diterima dengan baik (syarat pencairan dana ke penjual).
 
 #### Fitur Backend (Admin):
+
 -   **Delivery Order Management**: Admin menugaskan vendor towing/driver untuk transaksi tertentu.
 -   **Digital BAST**: Form upload foto bukti serah terima unit di lokasi tujuan sebagai dokumen legal digital.
 
@@ -331,17 +373,19 @@ Fitur ini menangani proses pasca-lelang, yaitu pengiriman unit kendaraan dari lo
 Fitur ini menangani alur bisnis untuk mengubah status user dari "Anggota" (Gratis/Terbatas) menjadi "Member" (Berbayar/Premium).
 
 #### Fitur Frontend (User):
+
 -   **Pricing Page**: Halaman daftar harga paket (Misal: Silver Rp 200rb/bln, Gold Rp 500rb/thn) beserta perbandingan fiturnya.
 -   **Subscription Checkout**: Alur pembayaran khusus untuk pembelian paket (terpisah dari pembayaran lelang).
 -   **Status Dashboard**: Menampilkan status paket aktif, tanggal kadaluarsa, dan badge "PRO/Member" di profil user.
 
 #### Fitur Backend (System Logic):
+
 -   **Plan Management**: Admin dapat membuat, mengedit, atau menonaktifkan paket langganan.
 -   **Auto-Downgrade Scheduler**:
     -   Sistem (Cron Job) otomatis mengecek setiap malam member yang masa aktifnya habis hari ini.
     -   Jika habis, role user otomatis dikembalikan menjadi "Anggota Biasa".
----
 
+---
 
 ## ⚙️ Konfigurasi Settings
 
@@ -458,6 +502,81 @@ Setiap event penting dikirim melalui:
 | 21  | Manaj Jadwal & Kalender  | 2   |
 | 22  | Logistik & Serah Terima  | 2   |
 | 23  | Sistem Membership        | 2   |
+
+---
+
+## 🆕 Fitur Tambahan yang Sudah Dibuat
+
+### 24. Company Pages ✅ **SUDAH DIBUAT**
+
+Halaman-halaman company profile dan informasi:
+
+#### About Us
+
+-   Halaman tentang perusahaan
+-   Profile tim/team members
+-   Foto dan bio anggota tim
+-   Link social media (LinkedIn, Instagram)
+-   Order number untuk urutan tampilan
+
+#### FAQ (Frequently Asked Questions)
+
+-   Sistem tanya jawab
+-   Kategori FAQ: general, account, auction, payment
+-   Status active/inactive
+-   Order number untuk urutan
+-   Group by category di frontend
+
+#### Career/Karir
+
+-   List lowongan pekerjaan
+-   Detail lowongan dengan deskripsi & requirements
+-   Tipe pekerjaan: fulltime, contract, internship
+-   Lokasi kerja
+-   Salary range
+-   Status active/inactive
+-   Form aplikasi kerja
+-   Upload CV (PDF, max 2MB)
+-   Cover letter
+-   Status lamaran: pending, reviewed, rejected, accepted
+-   Soft deletes
+
+#### Contact Us
+
+-   Form kontak dengan validasi
+-   Field: name, email, phone, subject, message
+-   Status inquiry: new, read, replied, spam
+-   Admin reply untuk balas pesan
+-   Scope untuk filter unread messages
+
+**Models:**
+
+-   `Page` - Konten dinamis (About Us, dll)
+-   `Team` - Data anggota tim
+-   `Faq` - Pertanyaan & jawaban
+-   `Vacancy` - Lowongan pekerjaan
+-   `JobApplication` - Lamaran kerja
+-   `Inquiry` - Pesan dari contact form
+
+**Routes:**
+
+-   `/about` - Halaman About Us
+-   `/faq` - Halaman FAQ
+-   `/career` - List lowongan
+-   `/career/{id}` - Detail lowongan
+-   `POST /career/{id}/apply` - Kirim lamaran
+-   `/contact` - Form kontak
+-   `POST /contact` - Kirim pesan
+
+---
+
+### 25. Helper Testing ✅ **SUDAH DIBUAT**
+
+Force login untuk development/testing:
+
+-   Route `/force-login` untuk auto-login sebagai user ID 1
+-   Auto-create user dummy jika belum ada
+-   Memudahkan testing tanpa perlu registrasi/login manual
 
 ---
 

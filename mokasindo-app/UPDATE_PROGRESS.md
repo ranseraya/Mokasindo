@@ -1,0 +1,379 @@
+# 📝 Update Progress - Mokasindo Project
+
+**Tanggal Update:** 29 November 2025
+
+---
+
+## 🎉 Fitur yang Sudah Selesai Dibuat
+
+### 1. ✅ **Etalase Kendaraan (Vehicle Catalog)**
+
+**Tim:** Frontend & Backend Etalase  
+**Status:** COMPLETED
+
+**Fitur:**
+
+-   ✅ List kendaraan dengan pagination (12 items/page)
+-   ✅ Search kendaraan (brand, model, description)
+-   ✅ Filter by kategori (motor/mobil)
+-   ✅ Filter by range harga (min-max)
+-   ✅ Filter by lokasi (city)
+-   ✅ Sorting (terbaru, termurah, termahal)
+-   ✅ View counter otomatis
+-   ✅ Detail kendaraan dengan relasi lengkap
+
+**API Endpoints:**
+
+```
+GET /etalase/vehicles - List dengan filter
+GET /etalase/vehicles/{id} - Detail
+GET /etalase/filters - Dropdown data
+```
+
+**Model:** `Vehicle.php`  
+**Controller:** `VehicleController.php`
+
+---
+
+### 2. ✅ **Wishlist / Favorit Kendaraan**
+
+**Tim:** Frontend & Backend Etalase  
+**Status:** COMPLETED
+
+**Fitur:**
+
+-   ✅ User bisa save kendaraan favorit
+-   ✅ List semua wishlist user
+-   ✅ Tambah ke wishlist
+-   ✅ Hapus dari wishlist
+-   ✅ Prevent duplicate (unique constraint)
+
+**API Endpoints:**
+
+```
+GET /wishlists - List (auth required)
+POST /wishlists - Tambah (auth required)
+DELETE /wishlists/{id} - Hapus (auth required)
+```
+
+**Database:**
+
+-   Tabel: `wishlists`
+-   Relasi: user_id + vehicle_id (unique)
+
+**Model:** `Wishlist.php`  
+**Controller:** `WishlistController.php`
+
+---
+
+### 3. ✅ **Company Pages (About, FAQ, Career, Contact)**
+
+**Tim:** Informasi PT & Layanan  
+**Status:** COMPLETED
+
+#### 3.1. About Us
+
+-   ✅ Halaman tentang perusahaan
+-   ✅ Team members dengan foto & bio
+-   ✅ Social media links (LinkedIn, Instagram)
+-   ✅ Order number untuk urutan tampilan
+
+**Tabel:** `teams`, `pages`  
+**Route:** `GET /about`
+
+#### 3.2. FAQ (Frequently Asked Questions)
+
+-   ✅ Sistem tanya jawab
+-   ✅ Kategori: general, account, auction, payment
+-   ✅ Active/inactive status
+-   ✅ Group by category
+-   ✅ Order number
+
+**Tabel:** `faqs`  
+**Route:** `GET /faq`
+
+#### 3.3. Career / Karir
+
+-   ✅ List lowongan pekerjaan
+-   ✅ Detail lowongan
+-   ✅ Tipe: fulltime, contract, internship
+-   ✅ Form aplikasi kerja
+-   ✅ Upload CV (PDF, max 2MB)
+-   ✅ Cover letter
+-   ✅ Status tracking: pending, reviewed, rejected, accepted
+-   ✅ Soft deletes
+
+**Tabel:** `vacancies`, `job_applications`  
+**Routes:**
+
+```
+GET /career - List lowongan
+GET /career/{id} - Detail
+POST /career/{id}/apply - Submit lamaran
+```
+
+#### 3.4. Contact Us
+
+-   ✅ Form kontak dengan validasi
+-   ✅ Status: new, read, replied, spam
+-   ✅ Admin reply field
+-   ✅ Scope untuk unread messages
+
+**Tabel:** `inquiries`  
+**Routes:**
+
+```
+GET /contact - Form
+POST /contact - Submit
+```
+
+**Model:** `Page`, `Team`, `Faq`, `Vacancy`, `JobApplication`, `Inquiry`  
+**Controller:** `CompanyController.php`
+
+---
+
+### 4. ✅ **Helper Testing**
+
+**Status:** COMPLETED
+
+-   ✅ Auto-login untuk development
+-   ✅ Route: `/force-login`
+-   ✅ Auto-create user dummy
+-   ✅ Memudahkan testing tanpa registrasi
+
+---
+
+## 📊 Database Update
+
+### Tabel Baru yang Ditambahkan:
+
+1. ✅ **wishlists** - Favorit kendaraan user
+2. ✅ **teams** - Data tim perusahaan
+3. ✅ **vacancies** - Lowongan pekerjaan
+4. ✅ **job_applications** - Lamaran kerja & CV
+5. ✅ **inquiries** - Pesan dari contact form
+6. ✅ **faqs** - Pertanyaan umum
+7. ✅ **pages** - Konten halaman dinamis
+8. ✅ **auction_schedules** - Jadwal/batch lelang
+9. ✅ **deliveries** - Pengiriman & BAST
+10. ✅ **subscription_plans** - Paket membership
+11. ✅ **user_subscriptions** - Langganan user
+
+**Total Tabel Sekarang:** 28 tabel
+
+---
+
+## 🔧 Models Baru:
+
+1. ✅ `Wishlist.php`
+2. ✅ `Team.php`
+3. ✅ `Vacancy.php`
+4. ✅ `JobApplication.php`
+5. ✅ `Inquiry.php`
+6. ✅ `Faq.php`
+7. ✅ `Page.php`
+8. ✅ `AuctionSchedule.php`
+9. ✅ `Delivery.php`
+10. ✅ `SubscriptionPlan.php`
+11. ✅ `UserSubscription.php`
+
+**Total Models Sekarang:** 25 models
+
+---
+
+## 🎯 Controllers yang Sudah Ada:
+
+1. ✅ `VehicleController` - Etalase kendaraan
+2. ✅ `WishlistController` - Favorit kendaraan
+3. ✅ `CompanyController` - Company pages
+
+---
+
+## 🌐 API Endpoints yang Sudah Ready:
+
+### Etalase (Public)
+
+```
+GET  /etalase/vehicles         - List kendaraan
+GET  /etalase/vehicles/{id}    - Detail kendaraan
+GET  /etalase/filters          - Filter data
+```
+
+### Wishlist (Auth Required)
+
+```
+GET    /wishlists              - List wishlist
+POST   /wishlists              - Tambah wishlist
+DELETE /wishlists/{id}         - Hapus wishlist
+```
+
+### Company Pages (Public)
+
+```
+GET  /about                    - About Us
+GET  /faq                      - FAQ
+GET  /career                   - List lowongan
+GET  /career/{id}              - Detail lowongan
+POST /career/{id}/apply        - Submit lamaran
+GET  /contact                  - Contact form
+POST /contact                  - Submit pesan
+```
+
+### Testing
+
+```
+GET /force-login               - Auto-login (dev only)
+```
+
+---
+
+## 📈 Progress Status
+
+| Fitur             | Status     | Persentase |
+| ----------------- | ---------- | ---------- |
+| Database & Models | ✅ Done    | 100%       |
+| Etalase Kendaraan | ✅ Done    | 100%       |
+| Wishlist          | ✅ Done    | 100%       |
+| Company Pages     | ✅ Done    | 100%       |
+| Authentication    | ⏳ Pending | 0%         |
+| Sistem Lelang     | ⏳ Pending | 0%         |
+| Payment Gateway   | ⏳ Pending | 0%         |
+| Notifikasi        | ⏳ Pending | 0%         |
+| Admin Dashboard   | ⏳ Pending | 0%         |
+
+---
+
+## ⚠️ Catatan Penting untuk Tim:
+
+### Untuk Developer Selanjutnya:
+
+1. **Database sudah ready** - 28 tabel dengan relasi lengkap
+2. **Models sudah dibuat** - 25 models dengan relationships
+3. **API Etalase ready** - Tinggal consume di frontend
+4. **Company pages ready** - About, FAQ, Career, Contact
+5. **Wishlist ready** - Fitur favorit kendaraan
+
+### Yang Perlu Dikerjakan Selanjutnya:
+
+1. **Authentication System**
+
+    - Register/Login
+    - Email verification
+    - Password reset
+    - Role-based access
+
+2. **Auction System**
+
+    - Real-time bidding
+    - Timer countdown
+    - Auto-extend di menit terakhir
+    - Winner determination
+
+3. **Payment Integration**
+
+    - Deposit handling
+    - Payment gateway (Midtrans/Xendit)
+    - Webhook handling
+    - Refund logic
+
+4. **Notification System**
+
+    - Telegram bot
+    - Email notification
+    - WhatsApp integration
+    - Push notification
+
+5. **Admin Dashboard**
+    - User management
+    - Vehicle approval
+    - Transaction monitoring
+    - Analytics & reports
+
+---
+
+## 📚 Dokumentasi:
+
+Semua dokumentasi sudah diupdate:
+
+1. ✅ **FEATURES.md** - Daftar lengkap fitur aplikasi
+2. ✅ **DATABASE.md** - Struktur database & relationships
+3. ✅ **UPDATE_PROGRESS.md** - File ini (progress tracking)
+
+**Lokasi file:**
+
+```
+mokasindo-app/
+├── FEATURES.md
+├── DATABASE.md
+└── UPDATE_PROGRESS.md
+```
+
+---
+
+## 🚀 Cara Testing:
+
+### 1. Akses Etalase:
+
+```
+http://127.0.0.1:8000/etalase/vehicles
+```
+
+**Test dengan filter:**
+
+```
+http://127.0.0.1:8000/etalase/vehicles?category=mobil&sort=cheapest
+http://127.0.0.1:8000/etalase/vehicles?search=toyota&min_price=50000000
+```
+
+### 2. Auto-Login (untuk testing):
+
+```
+http://127.0.0.1:8000/force-login
+```
+
+### 3. Test Wishlist (setelah login):
+
+```
+GET http://127.0.0.1:8000/wishlists
+
+POST http://127.0.0.1:8000/wishlists
+Body: {"vehicle_id": 1}
+
+DELETE http://127.0.0.1:8000/wishlists/1
+```
+
+### 4. Company Pages:
+
+```
+http://127.0.0.1:8000/about
+http://127.0.0.1:8000/faq
+http://127.0.0.1:8000/career
+http://127.0.0.1:8000/contact
+```
+
+---
+
+## 👥 Credit:
+
+**Yang Sudah Berkontribusi:**
+
+-   ✅ Pilot Team - Database & Models foundation
+-   ✅ Etalase Team - Vehicle catalog & wishlist
+-   ✅ Company Info Team - About, FAQ, Career, Contact
+
+**Terima kasih untuk semua kontribusi! 🎉**
+
+---
+
+## 📞 Kontak:
+
+Jika ada pertanyaan tentang struktur database atau API:
+
+-   Lihat `DATABASE.md` untuk detail struktur
+-   Lihat `FEATURES.md` untuk daftar fitur lengkap
+-   Check `routes/web.php` untuk semua available routes
+
+---
+
+**Last Updated:** 29 November 2025  
+**By:** Pilot Team (Database & Foundation)

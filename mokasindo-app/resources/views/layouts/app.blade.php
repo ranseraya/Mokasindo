@@ -33,10 +33,10 @@
                     <a href="/" class="text-gray-700 hover:text-indigo-600 font-medium transition">Beranda</a>
                     
                     <!-- Link Dinamis -->
-                    <a href="{{ route('company.about') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Tentang</a>
+                    {{-- <a href="{{ route('company.about') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Tentang</a>
                     <a href="{{ route('company.faq') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Bantuan</a>
                     <a href="{{ route('company.career') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Karir</a>
-                    <a href="{{ route('company.contact') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Kontak</a>
+                    <a href="{{ route('company.contact') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition">Kontak</a> --}}
                 </div>
 
                 <!-- Auth Buttons -->

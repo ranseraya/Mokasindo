@@ -133,9 +133,9 @@
                 <a href="/register" class="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition shadow-lg">
                     Daftar Gratis
                 </a>
-                <a href="{{ route('company.about') }}" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition">
+                {{-- <a href="{{ route('company.about') }}" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition">
                     Pelajari Lebih Lanjut
-                </a>
+                </a> --}}
             </div>
         </div>
     </section>

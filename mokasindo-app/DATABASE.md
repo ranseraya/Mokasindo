@@ -2,7 +2,9 @@
 
 ## ✅ Status: Database & Models Sudah Dibuat
 
-### 📊 Tabel yang Sudah Dibuat (17 tabel):
+### 📊 Tabel yang Sudah Dibuat (28 tabel):
+
+**Core System (17 tabel):**
 
 1. ✅ **users** - Data pengguna (anggota, member, admin, owner)
 2. ✅ **provinces** - Data provinsi
@@ -21,21 +23,16 @@
 15. ✅ **cache** - Laravel cache
 16. ✅ **jobs** - Laravel queue jobs
 17. ✅ **migrations** - Laravel migrations tracking
-18. ✅ **teams** - Data anggota tim dan struktur organisasi
-19. ✅ **vacancies** - Data lowongan pekerjaan (karena sudah ada nama tabel jobs)
-20. ✅ **job_applications** - Data pelamar kerja dan file CV
-21. ✅ **inquiries** - Data pesan masuk dari form Contact Us
-22. ✅ **faqs** - Data pertanyaan umum (FAQ)
-23. ✅ **pages** - Konten halaman dinamis (About, Terms, Privacy)
-24. ✅ **auction_schedules** - Data jadwal/batch lelang induk
-25. ✅ **deliveries** - Data pengiriman unit, tracking, dan bukti serah terima (BAST)
-26. ✅ **subscription_plans** - Master data paket langganan (Silver, Gold, Platinum)
-27. ✅ **user_subscriptions** - Data riwayat langganan user dan masa aktifnya
+
+**Company & Content (6 tabel):** 18. ✅ **teams** - Data anggota tim dan struktur organisasi 19. ✅ **vacancies** - Data lowongan pekerjaan 20. ✅ **job_applications** - Data pelamar kerja dan file CV 21. ✅ **inquiries** - Data pesan masuk dari form Contact Us 22. ✅ **faqs** - Data pertanyaan umum (FAQ) 23. ✅ **pages** - Konten halaman dinamis (About, Terms, Privacy)
+
+**Advanced Features (5 tabel):** 24. ✅ **wishlists** - Data kendaraan favorit user 25. ✅ **auction_schedules** - Data jadwal/batch lelang induk 26. ✅ **deliveries** - Data pengiriman unit, tracking, dan bukti serah terima (BAST) 27. ✅ **subscription_plans** - Master data paket langganan (Silver, Gold, Platinum) 28. ✅ **user_subscriptions** - Data riwayat langganan user dan masa aktifnya
 
 ---
 
-## 📁 Models yang Sudah Dibuat:
+## 📁 Models yang Sudah Dibuat (25 models):
 
+**Core Models:**
 ✅ User.php
 ✅ Province.php
 ✅ City.php
@@ -50,14 +47,21 @@
 ✅ Transaction.php
 ✅ Notification.php
 ✅ Setting.php
-✅ Team.php
-✅ Vacancy.php  (PENGGANTI Job.php)
-✅ JobApplication.php
-✅ Inquiry.php
-✅ Faq.php
-✅ Page.php
-✅ AuctionSchedule.php
-✅ Delivery.php
+
+**Company & Content Models:**
+✅ Team.php - Tim perusahaan
+✅ Vacancy.php - Lowongan pekerjaan
+✅ JobApplication.php - Lamaran kerja
+✅ Inquiry.php - Pesan contact us
+✅ Faq.php - FAQ
+✅ Page.php - Halaman dinamis
+
+**Advanced Feature Models:**
+✅ Wishlist.php - Favorit kendaraan
+✅ AuctionSchedule.php - Jadwal lelang
+✅ Delivery.php - Pengiriman & BAST
+✅ SubscriptionPlan.php - Paket membership
+✅ UserSubscription.php - Langganan user
 
 ---
 
@@ -72,12 +76,14 @@
 -   `hasMany` → payments
 -   `hasMany` → transactions (sebagai buyer/seller)
 -   `hasMany` → notifications
+-   `hasMany` → wishlists (kendaraan favorit)
 -   `belongsTo` → province, city, district, sub_district
 
 ### Vehicle Relationships:
 
 -   `belongsTo` → user (owner)
 -   `belongsTo` → province, city, district, sub_district
+-   `hasMany` → wishlists (yang menyukai kendaraan ini)
 -   `hasMany` → vehicle_images
 -   `hasOne` → auction
 -   `hasMany` → transactions
@@ -112,6 +118,36 @@
 -   `belongsTo` → vehicle
 -   `belongsTo` → user (buyer & seller)
 -   `hasMany` → payments
+-   `hasOne` → delivery
+
+### Wishlist Relationships:
+
+-   `belongsTo` → user
+-   `belongsTo` → vehicle
+
+### Vacancy Relationships:
+
+-   `hasMany` → job_applications (lamaran yang masuk)
+-   `belongsTo` → user (creator - optional)
+
+### JobApplication Relationships:
+
+-   `belongsTo` → vacancy
+
+### Page Relationships:
+
+-   `belongsTo` → user (last_updated_by)
+
+### Delivery Relationships:
+
+-   `belongsTo` → transaction
+-   `belongsTo` → user (driver/courier - optional)
+
+### AuctionSchedule Relationships:
+
+-   `hasMany` → auctions (lelang yang tergabung dalam batch ini)
+-   `belongsTo` → city (location)
+-   `belongsTo` → user (created_by)
 
 ---
 
@@ -333,121 +369,139 @@ Role: admin
 ```
 
 ### teams
-- id
-- name
-- position
-- photo_url
-- linkedin_url
-- instagram_url
-- bio
-- order_number
-- timestamps
+
+-   id
+-   name
+-   position
+-   photo_url
+-   linkedin_url
+-   instagram_url
+-   bio
+-   order_number
+-   timestamps
 
 ### vacancies
-- id
-- title
-- description (text)
-- requirements (text)
-- type (enum: fulltime, contract, internship)
-- location
-- salary_range
-- is_active (boolean)
-- closed_at
-- timestamps
-- soft deletes
+
+-   id
+-   title
+-   description (text)
+-   requirements (text)
+-   type (enum: fulltime, contract, internship)
+-   location
+-   salary_range
+-   is_active (boolean)
+-   closed_at
+-   timestamps
+-   soft deletes
 
 ### job_applications
-- id
-- job_id
-- name
-- email
-- phone
-- cover_letter
-- cv_path (file PDF)
-- status (enum: pending, reviewed, rejected, accepted)
-- applied_at
-- timestamps
+
+-   id
+-   job_id
+-   name
+-   email
+-   phone
+-   cover_letter
+-   cv_path (file PDF)
+-   status (enum: pending, reviewed, rejected, accepted)
+-   applied_at
+-   timestamps
 
 ### inquiries
-- id
-- name
-- email
-- phone
-- subject
-- message
-- status (enum: new, read, replied, spam)
-- ip_address
-- timestamps
+
+-   id
+-   name
+-   email
+-   phone
+-   subject
+-   message
+-   status (enum: new, read, replied, spam)
+-   ip_address
+-   timestamps
 
 ### faqs
-- id
-- category (enum: general, account, auction, payment)
-- question
-- answer
-- order_number
-- is_active
-- timestamps
+
+-   id
+-   category (enum: general, account, auction, payment)
+-   question
+-   answer
+-   order_number
+-   is_active
+-   timestamps
 
 ### pages
-- id
-- title
-- slug (unique: about-us, terms, privacy-policy)
-- content (longText)
-- meta_title
-- meta_description
-- last_updated_by (user_id)
-- timestamps
+
+-   id
+-   title
+-   slug (unique: about-us, terms, privacy-policy)
+-   content (longText)
+-   meta_title
+-   meta_description
+-   last_updated_by (user_id)
+-   timestamps
+
+### wishlists
+
+-   id
+-   user_id (Foreign Key ke users)
+-   vehicle_id (Foreign Key ke vehicles)
+-   timestamps
+-   unique constraint: user_id + vehicle_id (mencegah duplikat)
 
 ### auction_schedules
-- id
-- title (misal: "Lelang Mobil SUV Jakarta Batch 102")
-- description (text)
-- location_id (relasi ke kota/cabang)
-- start_date (datetime)
-- end_date (datetime)
-- is_active (boolean)
-- created_by (user_id admin)
-- timestamps
-- soft deletes
+
+-   id
+-   title (misal: "Lelang Mobil SUV Jakarta Batch 102")
+-   description (text)
+-   location_id (relasi ke kota/cabang)
+-   start_date (datetime)
+-   end_date (datetime)
+-   is_active (boolean)
+-   created_by (user_id admin)
+-   timestamps
+-   soft deletes
 
 ### deliveries
-- id
-- transaction_id (Foreign Key ke transactions)
-- pickup_address (Alamat pengambilan/pool seller)
-- destination_address (Alamat tujuan pemenang)
-- distance_km (Jarak tempuh dalam KM)
-- shipping_cost (Biaya ongkir/towing)
-- courier_name (Nama Ekspedisi/Driver Towing)
-- courier_phone
-- vehicle_plate_number (Plat nomor truk towing)
-- tracking_code (Nomor Resi/Kode Unik)
-- status (enum: pending, processing, on_delivery, delivered, confirmed)
-- proof_of_delivery (Foto bukti serah terima/BAST - File Image)
-- received_by (Nama penerima di lokasi)
-- received_at (Waktu diterima)
-- notes
-- timestamps
+
+-   id
+-   transaction_id (Foreign Key ke transactions)
+-   pickup_address (Alamat pengambilan/pool seller)
+-   destination_address (Alamat tujuan pemenang)
+-   distance_km (Jarak tempuh dalam KM)
+-   shipping_cost (Biaya ongkir/towing)
+-   courier_name (Nama Ekspedisi/Driver Towing)
+-   courier_phone
+-   vehicle_plate_number (Plat nomor truk towing)
+-   tracking_code (Nomor Resi/Kode Unik)
+-   status (enum: pending, processing, on_delivery, delivered, confirmed)
+-   proof_of_delivery (Foto bukti serah terima/BAST - File Image)
+-   received_by (Nama penerima di lokasi)
+-   received_at (Waktu diterima)
+-   notes
+-   timestamps
 
 ### subscription_plans
-- id
-- name (string: "Gold Member", "Dealer Pro")
-- price (decimal)
-- duration_days (int: 30, 365)
-- description (text)
-- features (json: list keunggulan untuk ditampilkan di pricing page)
-- is_active (boolean)
-- timestamps
+
+-   id
+-   name (string: "Gold Member", "Dealer Pro")
+-   price (decimal)
+-   duration_days (int: 30, 365)
+-   description (text)
+-   features (json: list keunggulan untuk ditampilkan di pricing page)
+-   is_active (boolean)
+-   timestamps
 
 ### user_subscriptions
-- id
-- user_id (foreign key ke users)
-- subscription_plan_id (foreign key ke subscription_plans)
-- transaction_id (foreign key ke transactions/payments jika ada)
-- start_date (datetime)
-- end_date (datetime) -- Kunci utama untuk pengecekan expired
-- status (enum: active, expired, cancelled)
-- price_paid (decimal) -- Harga saat beli (takutnya harga paket naik di masa depan)
-- timestamps
+
+-   id
+-   user_id (foreign key ke users)
+-   subscription_plan_id (foreign key ke subscription_plans)
+-   transaction_id (foreign key ke transactions/payments jika ada)
+-   start_date (datetime)
+-   end_date (datetime) -- Kunci utama untuk pengecekan expired
+-   status (enum: active, expired, cancelled)
+-   price_paid (decimal) -- Harga saat beli (takutnya harga paket naik di masa depan)
+-   timestamps
 
 ---
 
@@ -580,15 +634,129 @@ Role: admin
 
 ---
 
+---
+
+## 🎮 Controllers & API yang Sudah Dibuat:
+
+### ✅ VehicleController
+
+**Fitur:**
+
+-   List kendaraan dengan filter & search
+-   Detail kendaraan
+-   Filter dropdown (brands, categories)
+-   Increment view count otomatis
+
+**API Endpoints:**
+
+```
+GET  /etalase/vehicles         - List dengan filter & pagination
+GET  /etalase/vehicles/{id}    - Detail kendaraan
+GET  /etalase/filters          - Data untuk dropdown filter
+```
+
+**Query Parameters:**
+
+-   `search` - Keyword pencarian (brand, model, description)
+-   `category` - Filter motor/mobil
+-   `min_price` & `max_price` - Range harga
+-   `city_id` - Filter lokasi
+-   `sort` - Urutan: latest, cheapest, expensive
+
+**Features:**
+
+-   Hanya tampilkan status 'approved'
+-   Eager loading: primaryImage, city, auction, province
+-   Auto increment views_count
+-   Pagination 12 items
+
+---
+
+### ✅ WishlistController
+
+**Fitur:**
+
+-   List wishlist user yang login
+-   Tambah kendaraan ke wishlist
+-   Hapus dari wishlist
+-   Validasi duplicate (unique constraint)
+
+**API Endpoints:**
+
+```
+GET    /wishlists              - List wishlist (requires auth)
+POST   /wishlists              - Tambah ke wishlist (requires auth)
+DELETE /wishlists/{id}         - Hapus dari wishlist (requires auth)
+```
+
+**Request Body (POST):**
+
+```json
+{
+    "vehicle_id": 123
+}
+```
+
+---
+
+### ✅ CompanyController
+
+**Fitur:**
+
+-   Halaman About Us dengan team members
+-   FAQ dengan grouping by category
+-   Career listing & detail
+-   Upload CV untuk job application
+-   Contact form dengan inquiry tracking
+
+**Routes:**
+
+```
+GET  /about                    - Halaman About Us
+GET  /faq                      - Halaman FAQ
+GET  /career                   - List lowongan kerja
+GET  /career/{id}              - Detail lowongan
+POST /career/{id}/apply        - Submit lamaran
+GET  /contact                  - Form contact
+POST /contact                  - Kirim pesan
+```
+
+**Job Application Validation:**
+
+-   CV: Required, PDF only, max 2MB
+-   Email & Phone: Required, valid format
+-   Cover letter: Optional
+
+**File Upload:**
+
+-   CV disimpan di: `storage/app/public/cvs`
+-   Auto generate filename
+-   Validation: mimes:pdf, max:2048 KB
+
+---
+
+### ✅ Helper Testing
+
+**Route:** `/force-login`
+
+-   Auto-login sebagai user ID 1 untuk development
+-   Auto-create user dummy jika belum ada
+-   Redirect ke wishlists atau etalase
+
+---
+
 ## 🚀 Next Steps untuk Tim:
 
 ### Untuk Backend Developer:
 
 1. ✅ Database & Models sudah ready
-2. Buat Controllers (AuctionController, VehicleController, dll)
-3. Buat Services (AuctionService, PaymentService, dll)
-4. Buat API Routes
-5. Implement business logic di Services
+2. ✅ VehicleController (Etalase) sudah ready
+3. ✅ WishlistController sudah ready
+4. ✅ CompanyController sudah ready
+5. ⏳ Buat AuctionController (real-time bidding)
+6. ⏳ Buat PaymentController (payment gateway)
+7. ⏳ Buat Services (AuctionService, PaymentService, dll)
+8. ⏳ Implement business logic di Services
 
 ### Untuk Frontend Developer:
 
