@@ -12,6 +12,7 @@ use App\Services\TelegramService;          // Tambahan dari GitHub
 
 // Controllers
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ShowcaseController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WishlistController;
@@ -90,6 +91,11 @@ Route::controller(CompanyController::class)->group(function () {
         $page = Page::findBySlug('cookie-policy');
         return view('pages.company.generic', compact('page'));
     })->name('company.cookie_policy');
+});
+
+Route::controller(ShowcaseController::class)->group(function (){
+    Route::get('/showcase', 'index')->name('showcase.index');
+    Route::get('/showcase/(id-produk)', 'showcase')->name('showcase.showcase'); //nanti atur ini
 });
 
 // --- TES EVENT LISTENER REGISTERED ---
