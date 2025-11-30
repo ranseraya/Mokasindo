@@ -170,6 +170,14 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
+// wilayah routes
+Route::prefix('wilayah')->name('wilayah.')->group(function () {
+    Route::get('/cities', [WilayahController::class, 'cities'])->name('cities');
+    Route::get('/districts', [WilayahController::class, 'districts'])->name('districts');
+    Route::get('/subdistricts', [WilayahController::class, 'subdistricts'])->name('subdistricts');
+});
+
+
 // Proses login
 Route::post('/login', function (Request $request) {
     $data = $request->validate([
@@ -233,7 +241,7 @@ Route::prefix('owner')->middleware('auth')->group(function () {
     // Overview AJAX Routes:
     Route::get('/overview/quick-stats', [OverviewController::class, 'getQuickStats']);
     Route::get('/overview/weekly-chart', [OverviewController::class, 'getWeeklyChart']);
-    Route::get('/overview/ai-metrics', [AiAgentController::class, 'getRealPerformanceMetrics']); /
+    Route::get('/overview/ai-metrics', [AiAgentController::class, 'getRealPerformanceMetrics']); 
     Route::get('/overview/ai-recommendations', [AiAgentController::class, 'getRealRecommendations']); 
     Route::get('/overview/ai-alerts', [AiAgentController::class, 'getRealAlerts']);
     // Reports AJAX Routes:
