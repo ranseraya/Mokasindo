@@ -17,6 +17,9 @@ use App\Http\Controllers\MyBidController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\FacebookController;
+use App\Http\Controllers\OverviewController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AiAgentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -188,3 +191,52 @@ Route::post('/login', function (Request $request) {
 Route::get('/fb/post-form', [FacebookController::class, 'showForm']);
 Route::post('/fb/post-url', [FacebookController::class, 'postImageUrl']);
 Route::post('/fb/post-upload', [FacebookController::class, 'postImageUpload']);
+
+// ====================================================
+// FORCE LOGIN OWNER (Testing Owner Dashboard)
+// ====================================================
+
+Route::get('/force-login-owner', function () {
+    $user = \App\Models\User::where('email', 'owner@mokasindo.com')->first();
+    
+    if (!$user) {
+        // Buat user owner jika belum ada
+        $user = \App\Models\User::create([
+            'name' => 'Owner Mokasindo',
+            'email' => 'owner@mokasindo.com',
+            'password' => bcrypt('password123'),
+            'role' => 'owner',
+            'phone' => '+6281234567890',
+            'is_active' => true,
+            'verified_at' => now(),
+        ]);
+    }
+
+    Auth::login($user);
+    
+    return "<h1>Berhasil Login sebagai Owner!</h1> 
+            <p>Login sebagai: <b>" . $user->name . "</b> (Role: " . $user->role . ")</p>
+            <div style='margin: 20px 0;'>
+                <p><strong>Akses Dashboard Owner:</strong></p>
+                <ul>
+                    <li><a href='/owner/overview' style='color: blue; font-size: 16px;'>→ Overview</a></li>
+                    <li><a href='/owner/reports' style='color: green; font-size: 16px;'>→ Laporan & Analitik</a></li>
+                </ul>
+            </div>
+            <p><small>Note: Gunakan link ini khusus untuk testing dashboard owner</small></p>";
+});
+
+// Owner Routes (Dashboard & AJAX)
+Route::prefix('owner')->middleware('auth')->group(function () {
+    Route::get('/overview', [OverviewController::class, 'index'])->name('owner.overview');
+    Route::get('/reports', [ReportController::class, 'index'])->name('owner.reports');
+    // Overview AJAX Routes:
+    Route::get('/overview/quick-stats', [OverviewController::class, 'getQuickStats']);
+    Route::get('/overview/weekly-chart', [OverviewController::class, 'getWeeklyChart']);
+    Route::get('/overview/ai-metrics', [AiAgentController::class, 'getRealPerformanceMetrics']); /
+    Route::get('/overview/ai-recommendations', [AiAgentController::class, 'getRealRecommendations']); 
+    Route::get('/overview/ai-alerts', [AiAgentController::class, 'getRealAlerts']);
+    // Reports AJAX Routes:
+    Route::get('/reports/chart-data', [ReportController::class, 'getChartData']);
+    Route::get('/reports/export-excel', [ReportController::class, 'exportExcel']);
+});
