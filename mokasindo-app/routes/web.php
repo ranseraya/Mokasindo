@@ -8,13 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Page;
 use App\Models\User;
-use App\Services\TelegramService;          // Tambahan dari GitHub
-use App\Http\Controllers\FacebookController;
-
-
-// Controllers
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ShowcaseController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WishlistController;
@@ -23,6 +16,7 @@ use App\Http\Controllers\MyAdController;
 use App\Http\Controllers\MyBidController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\FacebookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -173,23 +167,23 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// WILAYAH ROUTES
-Route::get('/wilayah/cities', [WilayahController::class, 'cities'])
-    ->name('wilayah.cities');
+// Proses login
+Route::post('/login', function (Request $request) {
+    $data = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-Route::get('/wilayah/districts', [WilayahController::class, 'districts'])
-    ->name('wilayah.districts');
+    $credentials = ['email' => $data['email'], 'password' => $data['password']];
+    $remember = $request->has('remember');
 
-Route::get('/wilayah/sub-districts', [WilayahController::class, 'subDistricts'])
-    ->name('wilayah.subdistricts');
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+        return redirect()->intended('/');
+    }
 
-<<<<<<< HEAD
     return back()->withErrors(['email' => 'Email atau password salah'])->withInput();
 })->name('login.process');
-
-
-=======
->>>>>>> 2c9e605f215c9cdc52a2d88dbbae42d93125656a
 
 Route::get('/fb/post-form', [FacebookController::class, 'showForm']);
 Route::post('/fb/post-url', [FacebookController::class, 'postImageUrl']);
