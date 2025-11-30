@@ -1,35 +1,61 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use App\Http\Controllers\CompanyController;
-use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\WishlistController;
+use Illuminate\Support\Facades\Hash;       // Tambahan dari GitHub
+use Illuminate\Auth\Events\Registered;     // Tambahan dari GitHub
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Page;
 use App\Models\User;
+use App\Services\TelegramService;          // Tambahan dari GitHub
+
+// Controllers
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WishlistController;
-use App\Models\Page;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MyAdController;
+use App\Http\Controllers\MyBidController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('landing');
 });
 
+// Group Etalase
 Route::prefix('etalase')->group(function () {
     Route::get('/filters', [VehicleController::class, 'filters']);
     Route::get('/vehicles', [VehicleController::class, 'index']);
     Route::get('/vehicles/{id}', [VehicleController::class, 'show']);
 });
 
+// Group Member Area (Auth Required)
 Route::middleware('auth')->group(function () {
-    Route::get('/wishlists', [WishlistController::class, 'index']);
-    Route::post('/wishlists', [WishlistController::class, 'store']);
-    Route::delete('/wishlists/{id}', [WishlistController::class, 'destroy']);
+    // 1. Wishlists
+    Route::get('/wishlists', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlists', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlists/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+    // 2. Edit Profil
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // 3. Ganti Password
+    Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // 4. Iklan Saya
+    Route::get('/my-ads', [MyAdController::class, 'index'])->name('my.ads');
+
+    // 5. Hasil Bid / Lelang
+    Route::get('/my-bids', [MyBidController::class, 'index'])->name('my.bids');
 });
 
 // Group Route Company
@@ -63,7 +89,9 @@ Route::controller(CompanyController::class)->group(function () {
         return view('pages.company.generic', compact('page'));
     })->name('company.cookie_policy');
 });
+
 // --- TES EVENT LISTENER REGISTERED ---
+// (Bagian ini dikembalikan dari kode GitHub agar fitur tes notifikasi jalan)
 Route::get('/tes-register', function () {
     // Kita pakai WAKTU (time) biar emailnya unik terus setiap detik
     $unik = time();
@@ -94,11 +122,11 @@ Route::get('/instagram-feed', [InstagramController::class, 'getMedia']);
 // ====================================================
 // Jalankan URL ini sekali di browser agar kamu login otomatis sebagai ID 1 (http://mokasindo.test/force-login)
 Route::get('/force-login', function () {
-    $user = \App\Models\User::find(1);
+    $user = User::find(1);
     
     if (!$user) {
         // Buat user dummy jika belum ada
-        $user = \App\Models\User::create([
+        $user = User::create([
             'id' => 1,
             'name' => 'Tester User',
             'email' => 'tester@example.com',
@@ -108,7 +136,13 @@ Route::get('/force-login', function () {
 
     Auth::login($user);
     
-    return "<h1>Berhasil Login!</h1> <p>Login sebagai: <b>" . $user->name . "</b></p><p>Silakan akses <a href='/wishlists'>/wishlists</a> atau <a href='/etalase/vehicles'>/etalase/vehicles</a></p>";
+    return "<h1>Berhasil Login!</h1> 
+            <p>Login sebagai: <b>" . $user->name . "</b></p>
+            <p>Menu Cepat: 
+                <a href='/profile'>[Ke Profil]</a> | 
+                <a href='/wishlists'>[Ke Wishlists]</a> | 
+                <a href='/etalase/vehicles'>[Ke Etalase]</a>
+            </p>";
 });
 
 // Tampilkan form register perusahaan
@@ -167,3 +201,11 @@ Route::post('/login', function (Request $request) {
 
     return back()->withErrors(['email' => 'Email atau password salah'])->withInput();
 })->name('login.process');
+
+// Logout
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
