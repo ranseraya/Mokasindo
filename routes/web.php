@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Page;
 use App\Models\User;
+use App\Services\TelegramService;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WishlistController;
